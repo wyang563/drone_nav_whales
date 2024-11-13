@@ -21,9 +21,19 @@ class DroneServer:
         client_socket.close()
 
     def start_server(self):
-        print(f"Drone {self.drone_id} server started on {self.ip}:{self.port}")
-        while True:
-            client_socket, _ = self.server_socket.accept()
-            threading.Thread(target=self.handle_connection, args=(client_socket,)).start()
+        try:
+            print(f"Drone {self.drone_id} server started on {self.ip}:{self.port}")
+            while True:
+                client_socket, _ = self.server_socket.accept()
+                threading.Thread(target=self.handle_connection, args=(client_socket,), daemon=True).start()
+        except Exception as e:
+            print(f"server error: {e}")
+        finally:
+            self.server_socket.close()
+
+    def stop_server(self, signum, frame):
+        print("Shutting down server...")
+        self.running = False
+        self.server_socket.close()
 
 
