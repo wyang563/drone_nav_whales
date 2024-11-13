@@ -1,0 +1,3 @@
+[submodule "flying_whale"]
+	path = flying_whale
+	url = https://github.com/makramchahine/flying_whale.git
