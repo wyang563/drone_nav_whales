@@ -34,4 +34,4 @@ if drone_client.drone_id == "drone1":
     time.sleep(10)
     location = "0, 0, 0"
     drone_client.send_fly_to_command(f"Location of Drone {location}".format(args.drone_id))
-    time.sleep(10)
+time.sleep(1000)

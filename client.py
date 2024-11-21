@@ -1,10 +1,10 @@
 import socket
 
 class DroneClient:
-    def __init__(self, drone_id, other_addresses, drone_ctrl):
+    def __init__(self, drone_id, other_addresses):
         self.drone_id = drone_id
         self.other_addresses = other_addresses  # List of tuples (ip, port)
-        self.drone_ctrl = drone_ctrl
+        # self.drone_ctrl = drone_ctrl
 
     def send_fly_to_command(self, location):
         for ip, port in self.other_addresses:
