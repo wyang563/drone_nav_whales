@@ -2,8 +2,9 @@
 
 # Set IP addresses and ports for each drone instance
 DRONE_ID="drone1"
-DRONE_IP="10.31.130.102"  # Replace with actual IP address of Drone 1
-DRONE_PORT=8000
-DRONE_OTHER_ADDRESSES="10.31.130.102:8009"
+DRONE_IP="127.0.0.1"  # Replace with actual IP address of Drone 1
+DRONE_SERVER_PORT=8000
+DRONE_PORT=14540
+DRONE_OTHER_ADDRESSES="127.0.0.1:8009"
 
-python3 start_drone.py --drone_id $DRONE_ID --server_ip $DRONE_IP --server_port $DRONE_PORT --other_addresses $DRONE_OTHER_ADDRESSES
+python3 run.py --drone_port $DRONE_PORT --drone_id $DRONE_ID --server_ip $DRONE_IP --server_port $DRONE_SERVER_PORT --other_addresses $DRONE_OTHER_ADDRESSES
