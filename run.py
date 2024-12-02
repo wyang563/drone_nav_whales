@@ -6,13 +6,16 @@ import time
 import signal
 import asyncio
 from DRONE import drone_controller
+import sys
 
 def start_drone(drone_port, drone_id, server_ip, server_port, other_addresses, loop):
     # Start the server in a separate thread
     global drone_server
+    global drone
     # setup server and drone
     print("Starting drone in run...")
     drone_server = False
+    drone = None
     drone = loop.run_until_complete(drone_controller.init_drone(port=drone_port))
     drone_server = DroneServer(drone, drone_id, server_ip, server_port, loop)
     # signal.signal(signal.SIGINT, drone_server.stop_server)  # Handle Ctrl+C
@@ -29,7 +32,10 @@ def shutdown_server(signum, frame):
         drone_server.stop_server(signum, frame)
     else:
         print("Server instance not found")
+    if drone is not None:
+        drone._stop_mavsdk_server()
     asyncio.get_event_loop().stop()  # Stop the event loop
+    sys.exit(0)
 
 def main():
     parser = argparse.ArgumentParser(description="Drone communication system")
@@ -46,11 +52,16 @@ def main():
         ip, port = addr.split(':')
         other_addresses.append((ip, int(port)))
     drone_client, drone_server = start_drone(args.drone_port, args.drone_id, args.server_ip, args.server_port, other_addresses, loop)
+    position = loop.run_until_complete(drone_controller.get_drone_position(drone_client.drone))
+    print(args.drone_id + " starting position " + str(position))
     if drone_client.drone_id == "drone1":
         time.sleep(3)
         location = "10, 10, 10"
         speed = "14"
         drone_client.send_command("fly-to", location, speed)
+    time.sleep(10)
+    position = loop.run_until_complete(drone_controller.get_drone_position(drone_client.drone))
+    print(args.drone_id + " starting position " + str(position))
 
 if __name__ == "__main__":
     try:

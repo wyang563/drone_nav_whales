@@ -31,10 +31,7 @@ async def init_drone(port = 14540, baud = 57600, fly_meters = 0, speed = 1, fly_
             if health.is_global_position_ok and health.is_home_position_ok:
                 print("-- Global position state is good enough for flying.")
                 break
-        print("Fetching amsl altitude at home location....")
-        async for terrain_info in drone.telemetry.home():
-            absolute_altitude = terrain_info.absolute_altitude_m
-            break   
+            
     elif fly_mode == 'local':
         print("checking local")
         async for health in drone.telemetry.health():
@@ -131,3 +128,16 @@ async def get_drone_height(drone,area_covered_by_detected_body):
     else:
         print(area_covered_by_detected_body, 1/area_covered_by_detected_body)
         return 1/area_covered_by_detected_body 
+
+async def get_drone_position(drone):
+    try:
+        async for position_velocity in drone.telemetry.position_velocity_ned():
+            local_position = {
+                "north_m": position_velocity.position.north_m,
+                "east_m": position_velocity.position.east_m,
+                "down_m": position_velocity.position.down_m
+            }
+            return local_position
+    except Exception as e:
+        print(f"Error getting drone local position: {e}")
+        return None

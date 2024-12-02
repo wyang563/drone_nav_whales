@@ -1,0 +1,14 @@
+torch 
+torchvision 
+torchaudio
+tensorflow
+tensorflow-datasets
+opencv-python-headless
+scipy
+matplotlib
+async-timeout
+argparse
+glob2
+mavsdk
+asyncio
+rtsp

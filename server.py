@@ -62,7 +62,4 @@ class DroneServer:
         for thread in self.threads:
             if thread.is_alive():
                 thread.join()
-        self.drone._stop_mavsdk_server()
-        sys.exit(0)
-
 
